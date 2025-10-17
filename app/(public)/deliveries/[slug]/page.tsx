@@ -206,21 +206,21 @@ export default function DriverPage({ params }: DriverPageProps) {
                   {driver.avatar ? (
                     <Image
                       src={driver.avatar}
-                      alt={driver.user.name}
+                      alt={driver.user?.name || 'Driver'}
                       width={80}
                       height={80}
                       className="w-full h-full object-cover"
                     />
                   ) : (
                     <span className="text-3xl font-bold text-brand-green">
-                      {driver.user.name.charAt(0)}
+                      {driver.user?.name?.charAt(0) || 'D'}
                     </span>
                   )}
                 </div>
                 
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-2">
-                    <h1 className="text-2xl font-bold text-brand-ink">{driver.user.name}</h1>
+                    <h1 className="text-2xl font-bold text-brand-ink">{driver.user?.name || 'Driver'}</h1>
                     <div className="flex items-center space-x-1">
                       <Star className="w-4 h-4 text-brand-amber fill-current" />
                       <span className="text-sm font-medium text-brand-ink">4.8</span>

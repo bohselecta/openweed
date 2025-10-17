@@ -8,7 +8,52 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const region = searchParams.get('region')
     const zipCode = searchParams.get('zipCode')
+    const handle = searchParams.get('handle')
 
+    // If handle is provided, fetch single driver by handle
+    if (handle) {
+      const driver = await prisma.driverProfile.findUnique({
+        where: { handle },
+        include: {
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          products: {
+            where: {
+              isActive: true,
+            },
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              category: true,
+              price: true,
+              photo: true,
+              stock: true,
+              thc: true,
+              cbd: true,
+              strain: true,
+            },
+          },
+          _count: {
+            select: {
+              orders: true,
+            },
+          },
+        },
+      })
+
+      if (!driver) {
+        return NextResponse.json({ error: 'Driver not found' }, { status: 404 })
+      }
+
+      return NextResponse.json(driver)
+    }
+
+    // Otherwise, fetch multiple drivers
     let whereClause: any = {
       isActive: true,
       isVerified: true,
