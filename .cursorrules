@@ -1,0 +1,238 @@
+# OpenWeed MVP - Cursor Rules
+
+## Project Context
+This is OpenWeed MVP, a federated cannabis delivery platform built with Next.js 15, TypeScript, Prisma, and Tailwind CSS. The platform enables local drivers to create branded delivery sites while providing centralized discovery and management.
+
+## Tech Stack
+- Next.js 15 (App Router)
+- TypeScript (strict mode)
+- Prisma + PostgreSQL (Neon)
+- NextAuth.js (email magic links)
+- Tailwind CSS + Framer Motion
+- Leaflet + OpenStreetMap
+- UploadThing
+
+## Code Style Guidelines
+
+### TypeScript
+- Use strict TypeScript with proper typing
+- Prefer interfaces over types for object shapes
+- Use proper generic constraints
+- Avoid `any` type, use `unknown` if needed
+
+### React Components
+- Use functional components with hooks
+- Prefer composition over inheritance
+- Use proper prop typing with interfaces
+- Implement proper error boundaries
+
+### Styling
+- Use Tailwind CSS utility classes
+- Follow brand color tokens: `brand-green`, `brand-violet`, `brand-amber`
+- Maintain responsive design (mobile-first)
+- Use Framer Motion for animations
+
+### File Organization
+- Components: PascalCase (`DriverCard.tsx`)
+- Pages: lowercase (`page.tsx`)
+- Utilities: camelCase (`formatCurrency.ts`)
+- Use proper folder structure
+
+## Database Guidelines
+
+### Prisma Schema
+- Use descriptive model names
+- Include proper relations
+- Add indexes for performance
+- Use enums for status fields
+
+### API Routes
+- Follow RESTful conventions
+- Implement proper error handling
+- Use consistent response formats
+- Add role-based access control
+
+## Authentication & Authorization
+
+### User Roles
+- `BUYER`: Can place orders, use chat
+- `DRIVER`: Can manage mini-site, orders
+- `ADMIN`: Full platform access
+
+### Middleware
+- Protect admin routes (`/admin/*`)
+- Protect driver routes (`/driver-dashboard/*`)
+- Implement API route protection
+
+## Component Patterns
+
+### Layout Components
+- Use consistent header/footer patterns
+- Implement responsive navigation
+- Follow accessibility guidelines
+
+### Form Components
+- Use proper validation
+- Implement loading states
+- Handle errors gracefully
+- Use controlled components
+
+### Data Fetching
+- Use proper loading states
+- Implement error handling
+- Cache data appropriately
+- Use proper TypeScript types
+
+## Brand Guidelines
+
+### Design Language
+- Psychedelic-futurist aesthetic
+- Iridescent, crystalline elements
+- Fluid, organic shapes
+- High-end, premium feel
+
+### Color Usage
+- Primary: Green (`#39D98A`)
+- Secondary: Violet (`#B874F4`)
+- Accent: Amber (`#FBBF24`)
+- Text: Ink (`#141414`)
+- Background: Paper (`#F8F8F6`)
+
+## Performance Guidelines
+
+### Optimization
+- Use Next.js Image component
+- Implement proper caching
+- Optimize bundle size
+- Use dynamic imports when needed
+
+### Database
+- Use proper indexes
+- Implement pagination
+- Optimize queries
+- Use connection pooling
+
+## Security Guidelines
+
+### Authentication
+- Use secure session management
+- Implement proper CSRF protection
+- Validate all inputs
+- Use environment variables for secrets
+
+### API Security
+- Implement rate limiting
+- Validate request data
+- Use proper HTTP status codes
+- Sanitize user inputs
+
+## Testing Guidelines
+
+### Unit Tests
+- Test component behavior
+- Test utility functions
+- Test API routes
+- Use proper mocking
+
+### Integration Tests
+- Test database operations
+- Test authentication flows
+- Test order processing
+- Use test database
+
+## Deployment Guidelines
+
+### Environment Variables
+- Use proper environment separation
+- Never commit secrets
+- Use strong, unique secrets
+- Document all required variables
+
+### Build Process
+- Ensure proper TypeScript compilation
+- Run linting and formatting
+- Test before deployment
+- Use proper build optimization
+
+## Common Patterns
+
+### Error Handling
+```typescript
+try {
+  // operation
+} catch (error) {
+  console.error('Error:', error)
+  return NextResponse.json(
+    { error: 'Operation failed' },
+    { status: 500 }
+  )
+}
+```
+
+### Loading States
+```typescript
+const [isLoading, setIsLoading] = useState(true)
+const [error, setError] = useState<string | null>(null)
+```
+
+### Form Validation
+```typescript
+const validateForm = (): boolean => {
+  const errors: Record<string, string> = {}
+  // validation logic
+  setErrors(errors)
+  return Object.keys(errors).length === 0
+}
+```
+
+## Best Practices
+
+### Code Quality
+- Write self-documenting code
+- Use meaningful variable names
+- Keep functions small and focused
+- Add proper comments for complex logic
+
+### Performance
+- Use React.memo for expensive components
+- Implement proper key props
+- Avoid unnecessary re-renders
+- Use proper dependency arrays
+
+### Accessibility
+- Use semantic HTML
+- Implement proper ARIA labels
+- Ensure keyboard navigation
+- Test with screen readers
+
+## Debugging Guidelines
+
+### Common Issues
+- Check environment variables
+- Verify database connections
+- Test authentication flows
+- Check API route responses
+
+### Tools
+- Use browser dev tools
+- Check Next.js build output
+- Use Prisma Studio for database
+- Monitor network requests
+
+## Documentation
+
+### Code Comments
+- Document complex business logic
+- Explain non-obvious decisions
+- Add TODO comments for future work
+- Keep comments up to date
+
+### README Updates
+- Update setup instructions
+- Document new features
+- Include troubleshooting guides
+- Keep examples current
+
+---
+
+**Remember**: This is a cannabis delivery platform. Ensure all code follows legal compliance guidelines and implements proper age verification and regulatory requirements where applicable.

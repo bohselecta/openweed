@@ -1,0 +1,178 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      Role     @default(BUYER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  driver    DriverProfile?
+  orders    Order[]
+  reviews   Review[]
+  chatMessages ChatMessage[]
+  
+  @@map("users")
+}
+
+model DriverProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  handle      String   @unique
+  region      String
+  bio         String?
+  license     String?
+  avatar      String?
+  isActive    Boolean  @default(true)
+  isVerified  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products    Product[]
+  orders      Order[]
+  
+  @@map("driver_profiles")
+}
+
+model Product {
+  id          String          @id @default(cuid())
+  driverId    String
+  name        String
+  description String?
+  category    ProductCategory
+  price       Float
+  photo       String?
+  stock       Int             @default(0)
+  thc         Float?
+  cbd         Float?
+  strain      String?
+  isActive    Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  
+  // Relations
+  driver      DriverProfile   @relation(fields: [driverId], references: [id], onDelete: Cascade)
+  orderItems  OrderItem[]
+  
+  @@map("products")
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  buyerId     String
+  driverId    String
+  total       Float
+  status      OrderStatus @default(PENDING)
+  notes       String?
+  deliveryAddress String?
+  deliveryTime    DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // Relations
+  buyer       User        @relation(fields: [buyerId], references: [id])
+  driver      DriverProfile @relation(fields: [driverId], references: [id])
+  items       OrderItem[]
+  
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Float
+  
+  // Relations
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+  
+  @@map("order_items")
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  room      String   // region or driver-specific room
+  message   String
+  type      MessageType @default(TEXT)
+  createdAt DateTime @default(now())
+  
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  
+  @@map("chat_messages")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  buyerId   String
+  driverId  String
+  orderId   String?
+  rating    Int     // 1-5 stars
+  comment   String?
+  createdAt DateTime @default(now())
+  
+  // Relations
+  buyer     User     @relation(fields: [buyerId], references: [id])
+  
+  @@map("reviews")
+}
+
+model Zone {
+  id          String   @id @default(cuid())
+  name        String
+  zipCodes    String[] // Array of ZIP codes
+  centerLat   Float
+  centerLng   Float
+  radius      Float    // in miles
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("zones")
+}
+
+enum Role {
+  ADMIN
+  DRIVER
+  BUYER
+}
+
+enum ProductCategory {
+  FLOWER
+  CONCENTRATE
+  EDIBLE
+  TOPICAL
+  ACCESSORY
+}
+
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  EMOJI
+}

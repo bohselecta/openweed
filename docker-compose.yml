@@ -1,0 +1,59 @@
+# OpenWeed MVP - Docker Compose for Local Development
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: openweed-postgres
+    environment:
+      POSTGRES_DB: openweed
+      POSTGRES_USER: openweed
+      POSTGRES_PASSWORD: openweed123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openweed"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # OpenWeed Application
+  app:
+    build: .
+    container_name: openweed-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://openweed:openweed123@postgres:5432/openweed
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=your-development-secret-key-change-in-production
+      - EMAIL_SERVER_HOST=smtp.gmail.com
+      - EMAIL_SERVER_PORT=587
+      - EMAIL_SERVER_USER=your-email@gmail.com
+      - EMAIL_SERVER_PASSWORD=your-app-password
+      - EMAIL_FROM=noreply@openweed.local
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        sleep 10 &&
+        echo 'Pushing database schema...' &&
+        pnpm db:push &&
+        echo 'Seeding database...' &&
+        pnpm db:seed &&
+        echo 'Starting development server...' &&
+        pnpm dev
+      "
+
+volumes:
+  postgres_data:
