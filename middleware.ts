@@ -53,7 +53,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (pathname.startsWith('/api/chat')) {
+  if (pathname.startsWith('/api/chat') && request.method !== 'GET') {
     if (!token) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
