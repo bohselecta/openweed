@@ -7,6 +7,7 @@ A federated, community-driven cannabis delivery platform where local drivers can
 - ✅ Resolved TypeScript compilation errors  
 - ✅ Improved Docker development setup
 - ✅ Added Prisma client generation to build process
+- ✅ Fixed confusing route structure - onboard pages now use proper `/onboard/` URLs
 
 ## 🌿 Features
 
