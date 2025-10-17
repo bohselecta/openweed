@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
             where: { userId: session.user.id },
             select: { id: true },
           })
-          .then(drivers => drivers.map(d => d.id))
+          .then((drivers: { id: string }[]) => drivers.map(d => d.id))
       }
     }
     // Admins can see all orders
