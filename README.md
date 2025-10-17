@@ -2,6 +2,12 @@
 
 A federated, community-driven cannabis delivery platform where local drivers can run their own branded delivery sites under the OpenWeed ecosystem.
 
+## Latest Updates
+- ✅ Fixed Next.js 15 Suspense boundary requirements
+- ✅ Resolved TypeScript compilation errors  
+- ✅ Improved Docker development setup
+- ✅ Added Prisma client generation to build process
+
 ## 🌿 Features
 
 - **Driver Mini-Sites**: Each driver gets their own branded delivery site
