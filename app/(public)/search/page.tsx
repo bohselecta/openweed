@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Layout from '@/components/layout/Layout'
 import SearchBar from '@/components/ui/SearchBar'
@@ -27,7 +27,7 @@ interface Driver {
   }
 }
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams()
   const zipCode = searchParams.get('zip')
   
@@ -62,7 +62,7 @@ export default function SearchPage() {
   }
 
   return (
-    <Layout>
+    <>
       <div className="py-8 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-8">
@@ -172,6 +172,32 @@ export default function SearchPage() {
           </div>
         </div>
       )}
+    </>
+  )
+}
+
+export default function SearchPage() {
+  return (
+    <Layout>
+      <Suspense fallback={
+        <div className="py-8 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-brand-ink mb-4">
+                Find Cannabis Delivery
+              </h1>
+              <p className="text-lg text-brand-ink/70 mb-6">
+                Search for verified drivers in your area
+              </p>
+              <div className="animate-pulse">
+                <div className="h-12 bg-brand-ink/10 rounded-lg w-96 mx-auto"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <SearchContent />
+      </Suspense>
     </Layout>
   )
 }
