@@ -72,12 +72,6 @@ export default function MapComponent({ drivers = [], center }: MapComponentProps
         style={{ height: '100%', width: '100%' }}
         ref={mapRef}
         key={`map-${containerRef.current?.id || 'default'}`}
-        whenCreated={(map) => {
-          mapRef.current = map
-        }}
-        whenReady={() => {
-          // Map is ready
-        }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

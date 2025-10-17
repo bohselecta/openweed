@@ -19,23 +19,6 @@ async function main() {
     },
   })
 
-  // Create demo dispensary
-  const dispensary = await prisma.dispensary.upsert({
-    where: { id: 'austin-dispensary-demo' },
-    update: {},
-    create: {
-      id: 'austin-dispensary-demo',
-      name: 'Austin Cannabis Co.',
-      address: '1234 Main St',
-      city: 'Austin',
-      state: 'TX',
-      zipCode: '78704',
-      phone: '(512) 555-0123',
-      website: 'https://austincc.com',
-      license: 'TX-DISP-001',
-    },
-  })
-
   // Create demo user (driver)
   const demoUser = await prisma.user.upsert({
     where: { email: 'atxweedog@example.com' },
@@ -63,22 +46,12 @@ async function main() {
     },
   })
 
-  // Link driver to dispensary
-  await prisma.driverProfile.update({
-    where: { id: demoDriver.id },
-    data: {
-      dispensary: {
-        connect: { id: dispensary.id }
-      }
-    }
-  })
-
   // Create demo products
   const products = [
     {
       name: 'Blue Dream',
       description: 'Classic sativa-dominant hybrid with sweet berry aroma',
-      category: 'FLOWER',
+      category: 'FLOWER' as const,
       price: 45.00,
       stock: 10,
       thc: 18.5,
@@ -88,7 +61,7 @@ async function main() {
     {
       name: 'OG Kush',
       description: 'Indica-dominant classic with earthy pine flavor',
-      category: 'FLOWER',
+      category: 'FLOWER' as const,
       price: 50.00,
       stock: 8,
       thc: 22.0,
@@ -98,7 +71,7 @@ async function main() {
     {
       name: 'Sour Diesel Shatter',
       description: 'High-potency concentrate with diesel terpene profile',
-      category: 'CONCENTRATE',
+      category: 'CONCENTRATE' as const,
       price: 65.00,
       stock: 5,
       thc: 85.0,
@@ -107,7 +80,7 @@ async function main() {
     {
       name: 'Gummy Bears (Mixed Berry)',
       description: 'Delicious mixed berry gummies, 10mg THC each',
-      category: 'EDIBLE',
+      category: 'EDIBLE' as const,
       price: 25.00,
       stock: 20,
       thc: 10.0,
@@ -116,7 +89,7 @@ async function main() {
     {
       name: 'CBD Relief Balm',
       description: 'Topical balm for muscle and joint relief',
-      category: 'TOPICAL',
+      category: 'TOPICAL' as const,
       price: 35.00,
       stock: 15,
       thc: 0.0,
@@ -129,7 +102,6 @@ async function main() {
       data: {
         ...product,
         driverId: demoDriver.id,
-        dispensaryId: dispensary.id,
         photo: `/images/products/${product.name.toLowerCase().replace(/\s+/g, '-')}.jpg`,
       },
     })
@@ -165,19 +137,19 @@ async function main() {
       userId: demoBuyer.id,
       room: 'austin-central',
       message: 'Hey everyone! Just got some amazing Blue Dream from atxweedog 🌿',
-      type: 'TEXT',
+      type: 'TEXT' as const,
     },
     {
       userId: demoUser.id,
       room: 'austin-central',
       message: 'Thanks for the shoutout! Always happy to serve the community 🐕',
-      type: 'TEXT',
+      type: 'TEXT' as const,
     },
     {
       userId: demoBuyer.id,
       room: 'austin-central',
       message: 'Anyone know if there are any new strains available this week?',
-      type: 'TEXT',
+      type: 'TEXT' as const,
     },
   ]
 
@@ -200,7 +172,6 @@ async function main() {
 
   console.log('✅ Database seeded successfully!')
   console.log(`📍 Created zone: ${austinZone.name}`)
-  console.log(`🏪 Created dispensary: ${dispensary.name}`)
   console.log(`👤 Created driver: ${demoDriver.handle}`)
   console.log(`🛒 Created ${products.length} products`)
   console.log(`💬 Created ${chatMessages.length} chat messages`)

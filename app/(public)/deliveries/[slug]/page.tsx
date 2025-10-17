@@ -18,9 +18,9 @@ import { cn, formatCurrency, formatProductCategory } from '@/lib/utils'
 import ProductCard from '@/components/ui/ProductCard'
 
 interface DriverPageProps {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 interface Driver {
@@ -57,10 +57,14 @@ export default function DriverPage({ params }: DriverPageProps) {
   const [error, setError] = useState<string | null>(null)
   const [cart, setCart] = useState<Record<string, number>>({})
   const [isChatOpen, setIsChatOpen] = useState(false)
+  const [slug, setSlug] = useState<string>('')
 
   useEffect(() => {
-    fetchDriver(params.slug)
-  }, [params.slug])
+    params.then(({ slug: resolvedSlug }) => {
+      setSlug(resolvedSlug)
+      fetchDriver(resolvedSlug)
+    })
+  }, [params])
 
   const fetchDriver = async (handle: string) => {
     try {

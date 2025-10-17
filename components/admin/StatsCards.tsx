@@ -80,8 +80,7 @@ export default function StatsCards({ stats, className }: StatsCardsProps) {
             <span className={cn(
               'text-sm font-medium',
               card.changeType === 'positive' && 'text-brand-green',
-              card.changeType === 'warning' && 'text-brand-amber',
-              card.changeType === 'negative' && 'text-red-600'
+              card.changeType === 'warning' && 'text-brand-amber'
             )}>
               {card.change}
             </span>

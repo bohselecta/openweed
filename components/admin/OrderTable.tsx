@@ -38,7 +38,7 @@ interface OrderTableProps {
       price: number
       product: {
         name: string
-        photo?: string
+        photo?: string | null
       }
     }>
   }>

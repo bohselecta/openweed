@@ -11,7 +11,7 @@ interface DriverCardProps {
     handle: string
     region: string
     bio?: string
-    avatar?: string
+    avatar?: string | null
     user: {
       name: string
     }

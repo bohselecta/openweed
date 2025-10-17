@@ -5,11 +5,12 @@ import { authOptions } from '@/lib/auth'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const product = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         driver: {
           select: {
@@ -20,11 +21,6 @@ export async function GET(
                 name: true,
               },
             },
-          },
-        },
-        dispensary: {
-          select: {
-            name: true,
           },
         },
       },
@@ -46,9 +42,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.id) {
@@ -61,7 +58,7 @@ export async function PATCH(
     // Verify user owns the product (through driver profile)
     const product = await prisma.product.findFirst({
       where: {
-        id: params.id,
+        id,
         driver: {
           userId: session.user.id,
         },
@@ -73,7 +70,7 @@ export async function PATCH(
     }
 
     const updatedProduct = await prisma.product.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(name && { name }),
         ...(description !== undefined && { description }),
@@ -108,9 +105,10 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.id) {
@@ -120,7 +118,7 @@ export async function DELETE(
     // Verify user owns the product (through driver profile)
     const product = await prisma.product.findFirst({
       where: {
-        id: params.id,
+        id,
         driver: {
           userId: session.user.id,
         },
@@ -132,7 +130,7 @@ export async function DELETE(
     }
 
     await prisma.product.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ message: 'Product deleted successfully' })

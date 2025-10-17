@@ -2,20 +2,21 @@ import NextAuth from 'next-auth'
 import EmailProvider from 'next-auth/providers/email'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from './prisma'
+import { authConfig, emailConfig } from './config'
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     EmailProvider({
       server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
+        host: emailConfig.host,
+        port: emailConfig.port,
         auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
+          user: emailConfig.user,
+          pass: emailConfig.password,
         },
       },
-      from: process.env.EMAIL_FROM,
+      from: emailConfig.from,
     }),
   ],
   pages: {
@@ -26,14 +27,14 @@ export const authOptions = {
     strategy: 'jwt' as const,
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
         token.role = user.role
         token.id = user.id
       }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (token) {
         session.user.id = token.id as string
         session.user.role = token.role as string
@@ -41,7 +42,7 @@ export const authOptions = {
       return session
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: authConfig.secret,
 }
 
 export default NextAuth(authOptions)

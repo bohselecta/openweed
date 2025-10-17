@@ -5,11 +5,12 @@ import { authOptions } from '@/lib/auth'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const driver = await prisma.driverProfile.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         user: {
           select: {
@@ -22,7 +23,6 @@ export async function GET(
             isActive: true,
           },
         },
-        dispensary: true,
         _count: {
           select: {
             orders: true,
@@ -47,9 +47,10 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.id) {
@@ -72,7 +73,7 @@ export async function PATCH(
     }
 
     const driver = await prisma.driverProfile.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...updateData,
         ...(isActive !== undefined && { isActive }),
@@ -100,9 +101,10 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.id) {
@@ -111,7 +113,7 @@ export async function DELETE(
 
     // Check if user is admin or owns the driver profile
     const driver = await prisma.driverProfile.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: { userId: true },
     })
 
@@ -129,7 +131,7 @@ export async function DELETE(
     }
 
     await prisma.driverProfile.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ message: 'Driver deleted successfully' })

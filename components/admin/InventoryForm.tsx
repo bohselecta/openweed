@@ -11,11 +11,11 @@ interface InventoryFormProps {
     description?: string
     category: string
     price: number
-    photo?: string
+    photo?: string | null
     stock: number
     thc?: number
     cbd?: number
-    strain?: string
+    strain?: string | null
     isActive: boolean
     driver: {
       handle: string

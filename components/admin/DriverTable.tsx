@@ -20,7 +20,7 @@ interface DriverTableProps {
     handle: string
     region: string
     bio?: string
-    avatar?: string
+    avatar?: string | null
     isActive: boolean
     isVerified: boolean
     createdAt: string

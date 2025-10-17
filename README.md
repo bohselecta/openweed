@@ -19,6 +19,7 @@ A federated, community-driven cannabis delivery platform where local drivers can
 - Node.js 18+ 
 - pnpm (recommended) or npm
 - PostgreSQL database (Neon recommended)
+- Vercel account for deployment
 
 ### Installation
 
@@ -31,10 +32,10 @@ A federated, community-driven cannabis delivery platform where local drivers can
 
 2. **Set up environment variables**
    ```bash
-   cp .env.example .env.local
+   cp env.example .env.local
    ```
    
-   Fill in your environment variables:
+   Fill in your environment variables (see Configuration section below):
    ```env
    DATABASE_URL="postgresql://username:password@host:port/database"
    NEXTAUTH_URL="http://localhost:3000"
@@ -45,6 +46,7 @@ A federated, community-driven cannabis delivery platform where local drivers can
    EMAIL_SERVER_PASSWORD="your-app-password"
    EMAIL_FROM="noreply@openweed.co"
    UPLOADTHING_SECRET="your-uploadthing-secret"
+   UPLOADTHING_APP_ID="your-uploadthing-app-id"
    ```
 
 3. **Set up the database**
@@ -62,6 +64,47 @@ A federated, community-driven cannabis delivery platform where local drivers can
    - Main site: http://localhost:3000
    - Admin dashboard: http://localhost:3000/admin/dashboard
    - Demo driver site: http://localhost:3000/deliveries/atxweedog
+
+## 🔧 Configuration
+
+### DMNO Type-Safe Environment Variables
+
+OpenWeed uses [DMNO](https://dmno.dev) for type-safe environment variable management:
+
+- **Type Safety**: All environment variables are validated at runtime
+- **Auto-completion**: Full TypeScript support in your IDE
+- **Validation**: Schema validation prevents configuration errors
+- **Vercel Integration**: Native support for Vercel platform variables
+
+### Required Environment Variables
+
+```env
+# Database
+DATABASE_URL="postgresql://username:password@host:port/database"
+
+# Authentication  
+NEXTAUTH_URL="https://your-domain.vercel.app"
+NEXTAUTH_SECRET="your-secret-key"
+
+# Email Configuration
+EMAIL_SERVER_HOST="smtp.gmail.com"
+EMAIL_SERVER_PORT=587
+EMAIL_SERVER_USER="your-email@gmail.com"
+EMAIL_SERVER_PASSWORD="your-app-password"
+EMAIL_FROM="noreply@openweed.co"
+
+# File Upload
+UPLOADTHING_SECRET="your-uploadthing-secret"
+UPLOADTHING_APP_ID="your-uploadthing-app-id"
+```
+
+### Optional Services (Vercel Marketplace)
+
+Connect these services via Vercel Marketplace for automatic configuration:
+
+- **Mapbox**: Enhanced mapping capabilities
+- **Supabase**: Real-time features and chat
+- **Additional services**: Growing marketplace integrations
 
 ## 📁 Project Structure
 
@@ -129,21 +172,30 @@ The application uses a psychedelic-futurist aesthetic with:
 
 ### Vercel (Recommended)
 
-1. **Connect your repository to Vercel**
-2. **Set environment variables in Vercel dashboard**
-3. **Deploy automatically on push**
+1. **Connect Integrations**
+   - Go to Vercel project dashboard
+   - Navigate to "Integrations" tab
+   - Connect required services (Database, Email, File Upload)
+   - Optional services will be auto-configured
 
-### Manual Deployment
+2. **Environment Variables**
+   - Add required variables to Vercel project
+   - Vercel automatically injects integration variables
 
-1. **Build the application**
+3. **Deploy**
    ```bash
-   pnpm build
+   vercel --prod
    ```
 
-2. **Start the production server**
-   ```bash
-   pnpm start
-   ```
+### Docker Deployment
+
+```bash
+# Build production image
+docker build -f Dockerfile.prod -t openweed .
+
+# Run with docker-compose
+docker-compose up -d
+```
 
 ## 🧪 Testing
 

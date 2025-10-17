@@ -44,11 +44,6 @@ export async function GET(request: NextRequest) {
             },
           },
         },
-        dispensary: {
-          select: {
-            name: true,
-          },
-        },
       },
       orderBy: {
         createdAt: 'desc',
