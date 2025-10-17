@@ -12,26 +12,51 @@ git clone <repository-url>
 cd openweed-mvp
 ```
 
-### 2. Start with Docker Compose
+### 2. Setup Environment Variables
+```bash
+# Copy your local .env file (already configured)
+# Docker will use your local environment variables
+```
+
+### 3. Start with Docker Compose
 ```bash
 # Start all services (PostgreSQL + App)
-docker-compose up --build
+pnpm docker:up
 
 # Or run in background
 docker-compose up -d --build
+
+# Or use the convenient npm scripts
+pnpm docker:up
 ```
 
-### 3. Access the Application
+### 4. Access the Application
 - **Main Site**: http://localhost:3000
 - **Admin Dashboard**: http://localhost:3000/admin/dashboard
 - **Demo Driver Site**: http://localhost:3000/deliveries/atxweedog
 - **Driver Onboarding**: http://localhost:3000/onboard/driver
 
-### 4. Database Access
+### 5. Database Access
 - **Host**: localhost:5432
 - **Database**: openweed
 - **Username**: openweed
 - **Password**: openweed123
+
+## Convenient npm Scripts
+
+```bash
+# Start Docker services
+pnpm docker:up
+
+# Stop Docker services  
+pnpm docker:down
+
+# View logs
+pnpm docker:logs
+
+# Reset everything (removes volumes)
+pnpm docker:reset
+```
 
 ## Development Commands
 

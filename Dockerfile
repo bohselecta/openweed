@@ -5,8 +5,11 @@ FROM node:18-alpine
 # Set working directory
 WORKDIR /app
 
-# Install pnpm
-RUN npm install -g pnpm
+# Install system dependencies for Prisma
+RUN apk add --no-cache openssl
+
+# Install pnpm and tsx
+RUN npm install -g pnpm tsx
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
